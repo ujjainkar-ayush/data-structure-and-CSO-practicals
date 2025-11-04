@@ -1,4 +1,4 @@
-# data-structure-and-CSO-practicals
+# Data Structure and CSO Practicals
 
 List of Practical’s: Data Structure with OOP
 1.	Create and display a singly linked list with n integer nodes. 

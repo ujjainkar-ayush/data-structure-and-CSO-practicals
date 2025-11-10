@@ -3216,51 +3216,60 @@ int main() {
 // Output of 8:1 MUX = 0
 
 ```
-7. Design and implement the 8:1 MUX using gates /ICs.
+7. Design and implement the 4:1 MUX using gates /ICs.
 ```
 // Aim : Design and implement the 8:1 MUX using gates /ICs.   
 // Software used : Turbo C
 
 // Program:
+
 #include <stdio.h>
 
-int AND(int a, int b) { return a && b; }
-int OR(int a, int b) { return a || b; }
-int NOT(int a) { return !a; }
+int NOT(int a) {
+    return a ? 0 : 1;
+}
+
+int AND(int a, int b) {
+    return a & b;
+}
+
+int OR(int a, int b) {
+    return a | b;
+}
+
+int mux4to1(int i0, int i1, int i2, int i3, int s0, int s1) {
+    int ns0 = NOT(s0);
+    int ns1 = NOT(s1);
+
+    int y0 = AND(i0, AND(ns1, ns0));
+    int y1 = AND(i1, AND(ns1, s0));
+    int y2 = AND(i2, AND(s1, ns0));
+    int y3 = AND(i3, AND(s1, s0));
+
+    return OR(OR(y0, y1), OR(y2, y3));
+}
 
 int main() {
-    int inputs[8], s0, s1, s2, output;
-    printf("Enter 8 data inputs (0 or 1): ");
-    for(int i = 0; i < 8; i++)
-        scanf("%d", &inputs[i]);
+    int i0, i1, i2, i3, s0, s1;
 
-    printf("Enter select lines s2 s1 s0 (0 or 1): ");
-    scanf("%d %d %d", &s2, &s1, &s0);
+    printf("Enter inputs i0 i1 i2 i3: ");
+    scanf("%d %d %d %d", &i0, &i1, &i2, &i3);
 
-    int term[8];
-    term[0] = AND(AND(NOT(s2), NOT(s1)), NOT(s0));
-    term[1] = AND(AND(NOT(s2), NOT(s1)), s0);
-    term[2] = AND(AND(NOT(s2), s1), NOT(s0));
-    term[3] = AND(AND(NOT(s2), s1), s0);
-    term[4] = AND(AND(s2, NOT(s1)), NOT(s0));
-    term[5] = AND(AND(s2, NOT(s1)), s0);
-    term[6] = AND(AND(s2, s1), NOT(s0));
-    term[7] = AND(AND(s2, s1), s0);
+    printf("Enter select lines s0 s1: ");
+    scanf("%d %d", &s0, &s1);
 
-    output = OR(OR(OR(OR(OR(OR(AND(term[0], inputs[0]), AND(term[1], inputs[1])), 
-                          AND(term[2], inputs[2])), AND(term[3], inputs[3])),
-                          AND(term[4], inputs[4])), AND(term[5], inputs[5])),
-                          OR(AND(term[6], inputs[6]), AND(term[7], inputs[7])));
+    int output = mux4to1(i0, i1, i2, i3, s0, s1);
 
-    printf("Output of 8:1 MUX = %d\n", output);
+    printf("Output of 4:1 MUX = %d\n", output);
 
     return 0;
 }
 
+
 // Output :
-// Enter 8 data inputs (0 or 1): 1 0 1 0 1 0 1 0
-// Enter select lines s2 s1 s0 (0 or 1): 1 0 1
-// Output of 8:1 MUX = 0
+// Enter inputs i0 i1 i2 i3: 1 0 1 1
+// Enter select lines s0 s1: 0 1
+// Output of 4:1 MUX = 1
 
 ```
 8. Design a Full adder using gates.
